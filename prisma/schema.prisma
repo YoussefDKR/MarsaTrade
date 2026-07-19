@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  passwordHash         String    @map("password_hash")
+  name                 String
+  company              String
+  role                 String    @default("user")
+  plan                 String    @default("trial")
+  stripeCustomerId     String?   @map("stripe_customer_id")
+  stripeSubscriptionId String?   @map("stripe_subscription_id")
+  trialEndsAt          DateTime? @map("trial_ends_at")
+  billingEndsAt        DateTime? @map("billing_ends_at")
+  createdAt            DateTime  @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Species {
+  id           String   @id
+  name         String
+  displayName  String   @map("display_name")
+  unit         String   @default("EUR/kg")
+  currentPrice Float    @map("current_price")
+  change24h    Float    @map("change_24h")
+  fobPriceEur  Float    @map("fob_price_eur")
+  dutyRate     Float    @map("duty_rate")
+  vatRate      Float    @map("vat_rate")
+  history      Json
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("species")
+}
+
+model FreightRoute {
+  id            String   @id
+  origin        String
+  destination   String
+  rateUsd       Float    @map("rate_usd")
+  change7d      Float    @map("change_7d")
+  containerType String   @map("container_type")
+  history       Json
+  lastUpdated   String   @map("last_updated")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("freight_routes")
+}
+
+model MarketMeta {
+  id              String   @id @default("singleton")
+  dataLastUpdated String   @map("data_last_updated")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("market_meta")
+}
