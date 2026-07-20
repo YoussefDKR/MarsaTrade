@@ -1,6 +1,12 @@
 export type Locale = "en" | "fr";
 
-export type Messages = typeof en;
+type DeepString<T> = {
+  [K in keyof T]: T[K] extends string
+    ? string
+    : T[K] extends object
+      ? DeepString<T[K]>
+      : T[K];
+};
 
 export const en = {
   brand: {
@@ -249,6 +255,8 @@ export const en = {
     "Price Trend": "Price Trend",
   },
 } as const;
+
+export type Messages = DeepString<typeof en>;
 
 export const fr: Messages = {
   brand: {
