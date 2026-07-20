@@ -20,6 +20,7 @@ model User {
   stripeSubscriptionId String?   @map("stripe_subscription_id")
   trialEndsAt          DateTime? @map("trial_ends_at")
   billingEndsAt        DateTime? @map("billing_ends_at")
+  cancelAtPeriodEnd    Boolean   @default(false) @map("cancel_at_period_end")
   createdAt            DateTime  @default(now()) @map("created_at")
 
   @@map("users")

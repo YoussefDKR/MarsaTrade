@@ -13,6 +13,7 @@ export type User = {
   stripeSubscriptionId?: string;
   trialEndsAt?: string;
   billingEndsAt?: string;
+  cancelAtPeriodEnd?: boolean;
   createdAt: string;
 };
 
@@ -25,6 +26,7 @@ export type SessionUser = {
   plan: SubscriptionPlan;
   trialEndsAt?: string;
   billingEndsAt?: string;
+  cancelAtPeriodEnd?: boolean;
 };
 
 export type MarketStore = {

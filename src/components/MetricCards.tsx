@@ -37,7 +37,7 @@ type Props = {
 export function MetricCards({ metrics, newsCount }: Props) {
   const cards = [
     {
-      label: "Average Landed Cost (All Routes)",
+      label: "Average Landed Cost",
       value: `€${metrics.avgLandedCost.value.toFixed(2)}`,
       unit: "/ kg",
       change: metrics.avgLandedCost.change7d,
@@ -75,7 +75,7 @@ export function MetricCards({ metrics, newsCount }: Props) {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {cards.map((card) => (
         <div
           key={card.label}

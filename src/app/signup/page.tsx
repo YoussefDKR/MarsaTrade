@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { MarsaTradeLogo } from "@/components/MarsaTradeLogo";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function SignupPage() {
       setError(data.error ?? "Signup failed");
       return;
     }
-    router.push("/");
+    router.push("/dashboard");
     router.refresh();
   }
 
@@ -38,11 +39,10 @@ export default function SignupPage() {
     <div className="flex min-h-screen items-center justify-center bg-navy-950 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-navy-600 text-xl">
-            🐋
-          </div>
-          <h1 className="text-xl font-bold text-slate-800">Start your free trial</h1>
-          <p className="text-sm text-slate-500">7 days of full MarsaTrade Pro access</p>
+          <Link href="/" className="inline-block">
+            <MarsaTradeLogo variant="full" href={null} className="mx-auto" />
+          </Link>
+          <p className="mt-3 text-sm text-slate-500">7 days of full MarsaTrade Pro access</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

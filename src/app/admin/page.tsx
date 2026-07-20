@@ -24,7 +24,7 @@ export default function AdminPage() {
       fetch("/api/admin/market").then((r) => r.json()),
     ]).then(([auth, market]) => {
       if (!auth.user || auth.user.role !== "admin") {
-        router.push("/");
+        router.push("/dashboard");
         return;
       }
       setUser(auth.user);

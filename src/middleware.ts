@@ -5,12 +5,15 @@ import { jwtVerify } from "jose";
 const COOKIE_NAME = "marsatrade_session";
 
 const PUBLIC_PATHS = [
+  "/",
   "/login",
   "/signup",
   "/api/auth/login",
   "/api/auth/signup",
   "/api/auth/logout",
   "/api/stripe/webhook",
+  "/api/news",
+  "/api/rates",
 ];
 
 function getSecret(): Uint8Array {
@@ -35,7 +38,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   try {
@@ -45,7 +48,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const res = NextResponse.redirect(new URL("/login", request.url));
+    const res = NextResponse.redirect(new URL("/", request.url));
     res.cookies.delete(COOKIE_NAME);
     return res;
   }

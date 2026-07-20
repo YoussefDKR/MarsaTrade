@@ -122,7 +122,7 @@ async function fetchSingleFeed(feed: RssFeed): Promise<NewsItem[]> {
   const items: NewsItem[] = [];
   try {
     const parsed = await fetchRssFeed(feed.url);
-    for (const item of parsed.slice(0, 4)) {
+    for (const item of parsed.slice(0, 6)) {
       const title = item.title;
       const content = item.content;
       if (!title || !isSeafoodRelated(`${title} ${content}`)) continue;
@@ -242,7 +242,7 @@ export async function getNewsFeed(): Promise<NewsItem[]> {
 
   const rssItems = await fetchFromRss();
   const combined = dedupeNewsItems(
-    rssItems.length >= 3 ? rssItems.slice(0, 16) : [...rssItems, ...seedNews].slice(0, 16)
+    rssItems.length > 0 ? rssItems.slice(0, 20) : seedNews
   );
 
   cachedNews = combined;

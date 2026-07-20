@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "MarsaTrade — Global Seafood Intelligence",
   description:
     "Subscription dashboard for seafood traders: landed cost calculator, price trends, freight rates, and AI-curated multilingual news.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export const dynamic = "force-dynamic";

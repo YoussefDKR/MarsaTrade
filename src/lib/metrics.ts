@@ -6,23 +6,33 @@ export async function computeDashboardMetrics(): Promise<DashboardMetrics> {
   const freightRoutes = await getFreightRoutes();
 
   const avgPrice =
-    species.reduce((sum, s) => sum + s.currentPrice, 0) / species.length;
+    species.length > 0
+      ? species.reduce((sum, s) => sum + s.currentPrice, 0) / species.length
+      : 0;
 
   const avgFreight =
-    freightRoutes.reduce((sum, r) => sum + r.rateUsd, 0) / freightRoutes.length;
+    freightRoutes.length > 0
+      ? freightRoutes.reduce((sum, r) => sum + r.rateUsd, 0) / freightRoutes.length
+      : 0;
 
   const priceSparkline = species[0]?.history.map((p) => p.price) ?? [];
   const freightSparkline = freightRoutes[0]?.history ?? [];
 
   const prevAvgPrice =
-    species.reduce((sum, s) => sum + (s.history[s.history.length - 2]?.price ?? 0), 0) /
-    species.length;
+    species.length > 0
+      ? species.reduce(
+          (sum, s) => sum + (s.history[s.history.length - 2]?.price ?? 0),
+          0
+        ) / species.length
+      : 1;
 
   const prevAvgFreight =
-    freightRoutes.reduce(
-      (sum, r) => sum + (r.history[r.history.length - 2] ?? 0),
-      0
-    ) / freightRoutes.length;
+    freightRoutes.length > 0
+      ? freightRoutes.reduce(
+          (sum, r) => sum + (r.history[r.history.length - 2] ?? 0),
+          0
+        ) / freightRoutes.length
+      : 1;
 
   return {
     avgLandedCost: {

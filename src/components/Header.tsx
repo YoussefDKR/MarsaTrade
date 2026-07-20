@@ -19,7 +19,7 @@ export function Header({ user }: Props) {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    router.push("/");
     router.refresh();
   }
 

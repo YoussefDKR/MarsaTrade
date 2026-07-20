@@ -19,6 +19,7 @@ function mapUser(row: PrismaUser): User {
     stripeSubscriptionId: row.stripeSubscriptionId ?? undefined,
     trialEndsAt: row.trialEndsAt?.toISOString(),
     billingEndsAt: row.billingEndsAt?.toISOString(),
+    cancelAtPeriodEnd: row.cancelAtPeriodEnd,
     createdAt: row.createdAt.toISOString(),
   };
 }
@@ -107,6 +108,7 @@ export async function saveUser(user: User): Promise<User> {
       stripeSubscriptionId: user.stripeSubscriptionId,
       trialEndsAt: user.trialEndsAt ? new Date(user.trialEndsAt) : null,
       billingEndsAt: user.billingEndsAt ? new Date(user.billingEndsAt) : null,
+      cancelAtPeriodEnd: user.cancelAtPeriodEnd ?? false,
       createdAt: new Date(user.createdAt),
     },
     update: {
@@ -120,6 +122,7 @@ export async function saveUser(user: User): Promise<User> {
       stripeSubscriptionId: user.stripeSubscriptionId,
       trialEndsAt: user.trialEndsAt ? new Date(user.trialEndsAt) : null,
       billingEndsAt: user.billingEndsAt ? new Date(user.billingEndsAt) : null,
+      cancelAtPeriodEnd: user.cancelAtPeriodEnd ?? false,
     },
   });
   return mapUser(row);
@@ -145,11 +148,13 @@ export async function createUser(
 
 export async function getSpeciesData(): Promise<Species[]> {
   const rows = await prisma.species.findMany({ orderBy: { id: "asc" } });
+  if (rows.length === 0) return defaultSpecies;
   return rows.map(mapSpecies);
 }
 
 export async function getFreightData(): Promise<FreightRoute[]> {
   const rows = await prisma.freightRoute.findMany({ orderBy: { id: "asc" } });
+  if (rows.length === 0) return defaultFreight;
   return rows.map(mapFreight);
 }
 
@@ -322,9 +327,65 @@ export async function seedDemoUsers(): Promise<void> {
   }
 }
 
+export async function updateUserProfile(
+  userId: string,
+  data: { name: string; company: string; email: string }
+): Promise<User | { error: string }> {
+  const email = data.email.toLowerCase().trim();
+  if (!email.includes("@")) return { error: "Invalid email address" };
+  if (!data.name.trim()) return { error: "Name is required" };
+  if (!data.company.trim()) return { error: "Company is required" };
+
+  const existing = await prisma.user.findFirst({
+    where: { email, NOT: { id: userId } },
+  });
+  if (existing) return { error: "Email is already in use" };
+
+  try {
+    const row = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: data.name.trim(),
+        company: data.company.trim(),
+        email,
+      },
+    });
+    return mapUser(row);
+  } catch {
+    return { error: "Failed to update profile" };
+  }
+}
+
+export async function updateUserPassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<{ ok: true } | { error: string }> {
+  if (newPassword.length < 8) {
+    return { error: "New password must be at least 8 characters" };
+  }
+
+  const user = await getUserById(userId);
+  if (!user) return { error: "User not found" };
+
+  const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!valid) return { error: "Current password is incorrect" };
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash: await bcrypt.hash(newPassword, 10) },
+  });
+  return { ok: true };
+}
+
 export async function updateUserStripe(
   userId: string,
-  data: Partial<Pick<User, "stripeCustomerId" | "stripeSubscriptionId" | "plan" | "billingEndsAt">>
+  data: Partial<
+    Pick<
+      User,
+      "stripeCustomerId" | "stripeSubscriptionId" | "plan" | "billingEndsAt" | "cancelAtPeriodEnd"
+    >
+  >
 ): Promise<User | undefined> {
   try {
     const row = await prisma.user.update({
@@ -334,6 +395,7 @@ export async function updateUserStripe(
         stripeSubscriptionId: data.stripeSubscriptionId,
         plan: data.plan,
         billingEndsAt: data.billingEndsAt ? new Date(data.billingEndsAt) : undefined,
+        cancelAtPeriodEnd: data.cancelAtPeriodEnd,
       },
     });
     return mapUser(row);

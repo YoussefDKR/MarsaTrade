@@ -2,13 +2,24 @@ import { getSessionUser } from "@/lib/auth";
 import {
   createCheckoutSession,
   createPortalSession,
-  mockUpgradeToPro,
+  subscribeMock,
+  cancelMockSubscription,
+  reactivateMockSubscription,
+  getSubscriptionDetails,
   isStripeEnabled,
 } from "@/lib/subscription";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  return NextResponse.json({ stripeEnabled: isStripeEnabled() });
+  const user = await getSessionUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const stripeEnabled = isStripeEnabled();
+  const subscription = await getSubscriptionDetails(user, stripeEnabled);
+
+  return NextResponse.json({ subscription, stripeEnabled });
 }
 
 export async function POST(request: NextRequest) {
@@ -18,7 +29,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { action } = await request.json();
-  const origin = request.headers.get("origin") ?? "http://localhost:3000";
+  const origin = request.headers.get("origin") ?? request.nextUrl.origin;
 
   if (action === "checkout") {
     const result = await createCheckoutSession(user, origin);
@@ -36,8 +47,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: result.url });
   }
 
+  if (action === "subscribe") {
+    await subscribeMock(user.id);
+    return NextResponse.json({ ok: true, message: "Subscribed to MarsaTrade Pro" });
+  }
+
+  if (action === "cancel") {
+    await cancelMockSubscription(user.id);
+    return NextResponse.json({
+      ok: true,
+      message: "Subscription will cancel at the end of your billing period",
+    });
+  }
+
+  if (action === "reactivate") {
+    await reactivateMockSubscription(user.id);
+    return NextResponse.json({ ok: true, message: "Subscription reactivated" });
+  }
+
+  // legacy
   if (action === "mock-upgrade") {
-    await mockUpgradeToPro(user.id);
+    await subscribeMock(user.id);
     return NextResponse.json({ ok: true });
   }
 

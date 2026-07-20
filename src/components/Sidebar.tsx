@@ -13,11 +13,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { MarsaTradeMark } from "@/components/MarsaTradeLogo";
 import type { SessionUser } from "@/types/auth";
 import { formatBillingDate, getPlanLabel } from "@/lib/subscription-utils";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/intelligence", label: "Market Intelligence", icon: BarChart3 },
   { href: "/prices", label: "Prices & Trends", icon: TrendingUp },
   { href: "/freight", label: "Freight Rates", icon: Ship },
@@ -41,14 +42,8 @@ export function Sidebar({ user }: Props) {
 
   return (
     <aside className="fixed left-0 top-0 flex h-screen w-60 flex-col bg-navy-950 text-white">
-      <div className="flex items-center gap-3 px-5 py-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-600">
-          <span className="text-lg">🐋</span>
-        </div>
-        <div>
-          <div className="text-sm font-semibold tracking-tight">MarsaTrade</div>
-          <div className="text-[10px] text-slate-400">Global Seafood Intelligence</div>
-        </div>
+      <div className="px-4 py-4">
+        <MarsaTradeMark />
       </div>
 
       <nav className="mt-2 flex-1 space-y-0.5 px-3">
@@ -94,7 +89,7 @@ export function Sidebar({ user }: Props) {
           {user.plan === "trial" ? "Trial ends" : "Next billing"}: {billingDate}
         </p>
         <button
-          onClick={() => router.push("/settings")}
+          onClick={() => router.push("/settings#billing")}
           className="mt-3 w-full rounded-lg bg-navy-600 py-2 text-xs font-medium transition hover:bg-blue-600"
         >
           Manage Subscription

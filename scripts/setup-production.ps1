@@ -1,6 +1,7 @@
-#!/usr/bin/env pwsh
+#!/usr/bin/env powershell
 # One-shot MarsaTrade production setup (Supabase + migrate + seed + Vercel env)
-# Run from project root:  pwsh scripts/setup-production.ps1
+# Run from project root:
+#   .\scripts\setup-production.ps1
 
 param(
   [string]$ProjectRef = "btnwndvigyfvhuoqyprb",

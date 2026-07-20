@@ -60,27 +60,28 @@ export type RssFeed = {
 };
 
 export const RSS_FEEDS: RssFeed[] = [
-  // English
+  // English — industry
   { url: "https://www.seafoodsource.com/rss", name: "SeafoodSource", defaultLanguage: "EN", region: "Global" },
-  { url: "https://www.fao.org/fishery/rss/en", name: "FAO Fishery", defaultLanguage: "EN", region: "Global" },
   { url: "https://www.intrafish.com/rss", name: "IntraFish", defaultLanguage: "EN", region: "Global" },
   { url: "https://www.undercurrentnews.com/feed/", name: "Undercurrent News", defaultLanguage: "EN", region: "Global" },
   { url: "https://www.thefishsite.com/rss", name: "The Fish Site", defaultLanguage: "EN", region: "Global" },
-  // French
-  { url: "https://www.europeche.ch/fr/rss.xml", name: "Europeche", defaultLanguage: "FR", region: "Europe" },
+  { url: "https://www.fishupdate.com/feed/", name: "Fish Update", defaultLanguage: "EN", region: "Europe" },
+  { url: "https://www.nationalfisherman.com/rss.xml", name: "National Fisherman", defaultLanguage: "EN", region: "Americas" },
+  // Global institutions
+  { url: "https://www.fao.org/fishery/rss/en", name: "FAO Fishery", defaultLanguage: "EN", region: "Global" },
   { url: "https://www.fao.org/fishery/rss/fr", name: "FAO Pêche", defaultLanguage: "FR", region: "Global" },
-  // Arabic — use English feeds with Arabic keyword matching + regional sources
-  { url: "https://www.agrifocus.com/feed/", name: "AgriFocus MENA", defaultLanguage: "AR", region: "MENA" },
-  // Japanese
-  { url: "https://www.fisheries.jp/en/rss.xml", name: "Japan Fisheries", defaultLanguage: "JA", region: "Asia" },
+  { url: "https://www.fisheries.noaa.gov/news/rss.xml", name: "NOAA Fisheries", defaultLanguage: "EN", region: "Americas" },
 ];
 
 export const SEAFOOD_KEYWORDS = [
-  "seafood", "fish", "tuna", "sardine", "shrimp", "salmon", "octopus",
-  "aquaculture", "fisheries", "export", "import", "freight", "reefer",
-  "maritime", "poisson", "fruits de mer", "pêche", "thon", "crevette",
-  "أسماك", "سمك", "تونة", "جمبري", "سلmon", "exports", "imports",
-  "マグロ", "サーモン", "水産", "魚", "エビ",
+  "seafood", "fish", "fisheries", "fishing", "aquaculture", "mariculture",
+  "tuna", "sardine", "shrimp", "prawn", "salmon", "octopus", "squid", "cod",
+  "haddock", "lobster", "crab", "mussel", "oyster", "tilapia", "hake", "trout",
+  "eel", "anchov", "herring", "mackerel", "reefer", "export", "import", "trade",
+  "maritime", "catch", "harvest", "quota", "sustainable", "MSC", "ASC",
+  "poisson", "fruits de mer", "pêche", "thon", "crevette", "saumon", "pêcheurs",
+  "أسماك", "سمك", "تونة", "جمبري", "تصدير", "استيراد",
+  "マグロ", "サーモン", "水産", "魚", "エビ", "養殖",
 ];
 
 export const GNEWS_QUERIES = [

@@ -19,6 +19,17 @@ type Props = {
 };
 
 export function PriceTrendsChart({ species, lastUpdated }: Props) {
+  if (species.length === 0) {
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-slate-800">
+          Price Trends by Species (EUR/kg)
+        </h2>
+        <p className="mt-4 text-sm text-slate-500">Market data is loading…</p>
+      </div>
+    );
+  }
+
   const chartData = species[0]?.history.map((point, i) => {
     const row: Record<string, string | number> = { date: point.date };
     species.forEach((s) => {
@@ -67,7 +78,7 @@ export function PriceTrendsChart({ species, lastUpdated }: Props) {
           ))}
         </div>
 
-        <div className="h-56 flex-1">
+        <div className="h-64 flex-1">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />

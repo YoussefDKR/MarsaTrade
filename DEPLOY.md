@@ -22,7 +22,7 @@ The project was created with a random password. Set one you know:
 
 ```powershell
 cd C:\Users\mryou\Desktop\MarsaTrade
-pwsh scripts/setup-production.ps1
+.\scripts\setup-production.ps1
 ```
 
 Paste the password when prompted. The script will:
