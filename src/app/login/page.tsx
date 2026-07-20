@@ -36,7 +36,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
           <Link href="/" className="inline-block">
-            <MarsaTradeLogo variant="full" href={null} className="mx-auto" />
+            <MarsaTradeLogo variant="auth" href={null} className="mx-auto" />
           </Link>
         </div>
 

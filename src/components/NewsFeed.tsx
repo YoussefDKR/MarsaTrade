@@ -13,17 +13,18 @@ const categoryColors: Record<string, string> = {
 type Props = {
   items: NewsItem[];
   variant?: "default" | "sidebar";
+  className?: string;
 };
 
-export function NewsFeed({ items, variant = "default" }: Props) {
+export function NewsFeed({ items, variant = "default", className = "" }: Props) {
   const limit = variant === "sidebar" ? 8 : 4;
   const displayed = items.slice(0, limit);
 
   return (
     <div
       className={`rounded-xl border border-slate-200 bg-white p-5 shadow-sm ${
-        variant === "sidebar" ? "xl:min-h-[720px]" : ""
-      }`}
+        variant === "sidebar" ? "flex min-h-[720px] flex-col xl:min-h-0 xl:h-full" : ""
+      } ${className}`}
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-slate-800">AI News Feed</h2>
@@ -40,7 +41,7 @@ export function NewsFeed({ items, variant = "default" }: Props) {
           Loading seafood trade news from RSS feeds…
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
           {displayed.map((item) => (
             <article
               key={item.id}

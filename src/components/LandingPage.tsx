@@ -12,8 +12,7 @@ import {
   Zap,
   Languages,
 } from "lucide-react";
-import { MarsaTradeLogo } from "@/components/MarsaTradeLogo";
-import { MarketingDashboardPreview } from "@/components/MarketingDashboardPreview";
+import { MarsaTradeLogo, DashboardMockupImage } from "@/components/MarsaTradeLogo";
 import { PRO_PRICE_EUR } from "@/lib/subscription-utils";
 
 type Props = {
@@ -162,9 +161,8 @@ export function LandingPage({ rates }: Props) {
             )}
           </div>
 
-          <div className="relative lg:pl-4">
-            <div className="absolute -inset-4 rounded-2xl bg-blue-500/10 blur-3xl" aria-hidden />
-            <MarketingDashboardPreview />
+          <div className="relative lg:pl-2">
+            <DashboardMockupImage />
           </div>
         </div>
       </section>
@@ -250,7 +248,7 @@ export function LandingPage({ rates }: Props) {
       {/* About */}
       <section id="about" className="bg-navy-950 py-16">
         <div className="mx-auto max-w-3xl px-6 text-center">
-          <MarsaTradeLogo variant="full" href={null} className="mx-auto" />
+          <MarsaTradeLogo variant="auth" href={null} className="mx-auto" />
           <p className="mt-6 text-sm leading-relaxed text-slate-400">
             MarsaTrade is built for seafood exporters, importers, and logistics companies
             who need landed costs, freight benchmarks, and market news in one place —

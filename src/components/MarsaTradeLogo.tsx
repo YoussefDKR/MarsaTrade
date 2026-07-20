@@ -3,7 +3,7 @@ import Link from "next/link";
 
 type Props = {
   href?: string | null;
-  variant?: "header" | "full";
+  variant?: "header" | "full" | "auth";
   className?: string;
 };
 
@@ -74,6 +74,11 @@ export function MarsaTradeLogo({
         className={`h-14 w-auto object-contain ${className}`}
         priority
       />
+    ) : variant === "auth" ? (
+      <span className={`inline-flex items-center gap-2.5 ${className}`}>
+        <BrandIcon size={40} circle />
+        <BrandText light={false} />
+      </span>
     ) : (
       <span className={`inline-flex items-center gap-2.5 ${className}`}>
         <BrandIcon size={34} />
@@ -96,5 +101,25 @@ export function MarsaTradeMark({ href = "/dashboard" }: { href?: string }) {
       <BrandIcon size={36} circle />
       <BrandText light />
     </Link>
+  );
+}
+
+/** High-fidelity dashboard screenshot for marketing hero */
+export function DashboardMockupImage({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative ${className}`}>
+      <div
+        className="pointer-events-none absolute -inset-6 rounded-3xl bg-blue-500/15 blur-3xl"
+        aria-hidden
+      />
+      <Image
+        src="/dashboard-mockup.png"
+        alt="MarsaTrade dashboard — price trends, freight rates, landed cost calculator, and AI news feed"
+        width={1400}
+        height={980}
+        className="relative w-full rounded-xl border border-white/10 shadow-2xl shadow-black/50"
+        priority
+      />
+    </div>
   );
 }

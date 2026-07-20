@@ -23,14 +23,13 @@ export default async function DashboardHomePage() {
       <div className="space-y-5 p-6">
         <MetricCards metrics={metrics} newsCount={newsCount} />
 
-        <div className="grid grid-cols-12 items-start gap-5">
-          {/* Main column: charts + landed cost calculator (matches mockup left) */}
-          <div className="col-span-12 space-y-5 xl:col-span-8">
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-10">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-stretch">
+          <div className="flex min-w-0 flex-1 flex-col gap-5">
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
               <div className="lg:col-span-7">
                 <PriceTrendsChart species={species} lastUpdated={lastUpdated} />
               </div>
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-5">
                 <FreightRatesPanel routes={freightRoutes} />
               </div>
             </div>
@@ -40,10 +39,9 @@ export default async function DashboardHomePage() {
             </section>
           </div>
 
-          {/* Right column: full-height news feed */}
-          <div className="col-span-12 xl:col-span-4">
-            <NewsFeed items={news} variant="sidebar" />
-          </div>
+          <aside className="w-full xl:w-[min(380px,32%)] xl:shrink-0">
+            <NewsFeed items={news} variant="sidebar" className="h-full" />
+          </aside>
         </div>
       </div>
     </DashboardPage>

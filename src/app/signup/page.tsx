@@ -40,7 +40,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
           <Link href="/" className="inline-block">
-            <MarsaTradeLogo variant="full" href={null} className="mx-auto" />
+            <MarsaTradeLogo variant="auth" href={null} className="mx-auto" />
           </Link>
           <p className="mt-3 text-sm text-slate-500">7 days of full MarsaTrade Pro access</p>
         </div>
