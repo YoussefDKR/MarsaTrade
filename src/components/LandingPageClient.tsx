@@ -52,12 +52,12 @@ export function LandingPageClient({ rates }: Props) {
             <a href="#pricing" className="transition hover:text-white">
               {t("nav.pricing")}
             </a>
-            <a href="#features" className="transition hover:text-white">
+            <Link href="/resources" className="transition hover:text-white">
               {t("nav.resources")}
-            </a>
-            <a href="#about" className="transition hover:text-white">
+            </Link>
+            <Link href="/about" className="transition hover:text-white">
               {t("nav.about")}
-            </a>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -91,8 +91,8 @@ export function LandingPageClient({ rates }: Props) {
             <div className="flex flex-col gap-3 text-sm text-slate-300">
               <a href="#product" onClick={() => setMobileNav(false)}>{t("nav.product")}</a>
               <a href="#pricing" onClick={() => setMobileNav(false)}>{t("nav.pricing")}</a>
-              <a href="#features" onClick={() => setMobileNav(false)}>{t("nav.resources")}</a>
-              <a href="#about" onClick={() => setMobileNav(false)}>{t("nav.about")}</a>
+              <Link href="/resources" onClick={() => setMobileNav(false)}>{t("nav.resources")}</Link>
+              <Link href="/about" onClick={() => setMobileNav(false)}>{t("nav.about")}</Link>
               <div className="pt-2 sm:hidden">
                 <LanguageSwitcher variant="dark" />
               </div>
@@ -156,13 +156,13 @@ export function LandingPageClient({ rates }: Props) {
                 {t("landing.startTrial")}
                 <ArrowRight size={16} />
               </Link>
-              <a
-                href="#features"
+              <Link
+                href="/resources"
                 className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
               >
                 <Play size={14} className="fill-white" />
                 {t("landing.seeHow")}
-              </a>
+              </Link>
             </div>
 
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
@@ -255,16 +255,25 @@ export function LandingPageClient({ rates }: Props) {
         </RevealOnScroll>
       </section>
 
-      <section id="about" className="bg-navy-950 py-20">
+      <section className="border-t border-white/10 bg-navy-950 py-16">
         <RevealOnScroll className="mx-auto max-w-3xl px-6 text-center">
           <MarsaTradeLogo variant="auth" href={null} className="mx-auto" />
           <p className="mt-6 text-sm leading-relaxed text-slate-400">{t("landing.aboutDesc")}</p>
+          <Link
+            href="/about"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300"
+          >
+            {t("nav.about")}
+            <ArrowRight size={14} />
+          </Link>
         </RevealOnScroll>
       </section>
 
       <footer className="border-t border-white/10 py-8 text-center text-xs text-slate-500">
         <p>© {new Date().getFullYear()} MarsaTrade · {t("landing.footer")}</p>
         <div className="mt-3 flex justify-center gap-4">
+          <Link href="/resources" className="hover:text-slate-300">{t("nav.resources")}</Link>
+          <Link href="/about" className="hover:text-slate-300">{t("nav.about")}</Link>
           <Link href="/privacy" className="hover:text-slate-300">{t("app.privacy")}</Link>
           <Link href="/terms" className="hover:text-slate-300">{t("app.terms")}</Link>
         </div>

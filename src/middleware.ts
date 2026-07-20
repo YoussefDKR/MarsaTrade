@@ -10,6 +10,8 @@ const PUBLIC_PATHS = [
   "/signup",
   "/privacy",
   "/terms",
+  "/resources",
+  "/about",
   "/api/auth/login",
   "/api/auth/signup",
   "/api/auth/logout",
