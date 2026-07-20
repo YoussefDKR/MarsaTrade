@@ -12,7 +12,10 @@ import {
   BarChart3,
   Zap,
   Languages,
+  Menu,
+  X,
 } from "lucide-react";
+import { useState } from "react";
 import { MarsaTradeLogo, DashboardMockupImage } from "@/components/MarsaTradeLogo";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -34,6 +37,7 @@ const TRUSTED_BY = [
 
 export function LandingPageClient({ rates }: Props) {
   const { t, m } = useLocale();
+  const [mobileNav, setMobileNav] = useState(false);
 
   return (
     <div className="min-h-screen bg-navy-950 text-white">
@@ -57,7 +61,17 @@ export function LandingPageClient({ rates }: Props) {
           </nav>
 
           <div className="flex items-center gap-3">
-            <LanguageSwitcher variant="dark" />
+            <button
+              type="button"
+              onClick={() => setMobileNav((v) => !v)}
+              className="rounded-lg border border-white/20 p-2 text-slate-300 md:hidden"
+              aria-label={t("app.menu")}
+            >
+              {mobileNav ? <X size={18} /> : <Menu size={18} />}
+            </button>
+            <div className="hidden sm:block">
+              <LanguageSwitcher variant="dark" />
+            </div>
             <Link
               href="/login"
               className="text-sm font-medium text-slate-300 transition hover:text-white"
@@ -72,6 +86,19 @@ export function LandingPageClient({ rates }: Props) {
             </Link>
           </div>
         </div>
+        {mobileNav && (
+          <nav className="border-t border-white/10 px-6 py-4 md:hidden">
+            <div className="flex flex-col gap-3 text-sm text-slate-300">
+              <a href="#product" onClick={() => setMobileNav(false)}>{t("nav.product")}</a>
+              <a href="#pricing" onClick={() => setMobileNav(false)}>{t("nav.pricing")}</a>
+              <a href="#features" onClick={() => setMobileNav(false)}>{t("nav.resources")}</a>
+              <a href="#about" onClick={() => setMobileNav(false)}>{t("nav.about")}</a>
+              <div className="pt-2 sm:hidden">
+                <LanguageSwitcher variant="dark" />
+              </div>
+            </div>
+          </nav>
+        )}
       </header>
 
       <section id="product" className="relative overflow-hidden">
@@ -236,7 +263,11 @@ export function LandingPageClient({ rates }: Props) {
       </section>
 
       <footer className="border-t border-white/10 py-8 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} MarsaTrade · {t("landing.footer")}
+        <p>© {new Date().getFullYear()} MarsaTrade · {t("landing.footer")}</p>
+        <div className="mt-3 flex justify-center gap-4">
+          <Link href="/privacy" className="hover:text-slate-300">{t("app.privacy")}</Link>
+          <Link href="/terms" className="hover:text-slate-300">{t("app.terms")}</Link>
+        </div>
       </footer>
     </div>
   );

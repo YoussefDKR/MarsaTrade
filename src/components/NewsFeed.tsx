@@ -3,6 +3,7 @@
 import type { NewsItem } from "@/types";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
+import type { Messages } from "@/i18n/messages";
 
 const categoryColors: Record<string, string> = {
   Regulation: "bg-blue-100 text-blue-700",
@@ -11,6 +12,11 @@ const categoryColors: Record<string, string> = {
   "Price Trend": "bg-amber-100 text-amber-700",
 };
 
+function categoryLabel(m: Messages, category: string) {
+  const key = category as keyof Messages["categories"];
+  return m.categories[key] ?? category;
+}
+
 type Props = {
   items: NewsItem[];
   variant?: "default" | "sidebar";
@@ -18,7 +24,7 @@ type Props = {
 };
 
 export function NewsFeed({ items, variant = "default", className = "" }: Props) {
-  const { t } = useLocale();
+  const { t, m } = useLocale();
   const limit = variant === "sidebar" ? 8 : 4;
   const displayed = items.slice(0, limit);
 
@@ -55,7 +61,7 @@ export function NewsFeed({ items, variant = "default", className = "" }: Props) 
                     categoryColors[item.category] ?? "bg-slate-100 text-slate-600"
                   }`}
                 >
-                  {item.category}
+                  {categoryLabel(m, item.category)}
                 </span>
                 {item.languages.map((lang) => (
                   <span

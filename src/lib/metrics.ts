@@ -46,7 +46,7 @@ export async function computeDashboardMetrics(): Promise<DashboardMetrics> {
         Math.round(((avgFreight - prevAvgFreight) / prevAvgFreight) * 1000) / 10,
       sparkline: freightSparkline,
     },
-    watchlistCount: species.length + 2,
+    watchlistCount: species.length,
     newsToday: 12,
   };
 }

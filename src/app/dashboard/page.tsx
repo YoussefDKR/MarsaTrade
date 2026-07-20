@@ -1,4 +1,5 @@
 import { DashboardPage } from "@/components/DashboardPage";
+import { OnboardingModal } from "@/components/OnboardingModal";
 import { MetricCards } from "@/components/MetricCards";
 import { PriceTrendsChart } from "@/components/PriceTrendsChart";
 import { FreightRatesPanel } from "@/components/FreightRatesPanel";
@@ -20,6 +21,7 @@ export default async function DashboardHomePage() {
 
   return (
     <DashboardPage>
+      <OnboardingModal />
       <div className="space-y-5 p-6">
         <MetricCards metrics={metrics} newsCount={newsCount} />
 

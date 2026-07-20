@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ChevronDown, LogOut, Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import type { SessionUser } from "@/types/auth";
 import { getInitials } from "@/lib/user-utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLocale } from "@/i18n/LocaleProvider";
+import { useNav } from "@/context/NavContext";
 
 type Props = {
   user: SessionUser;
@@ -14,9 +15,12 @@ type Props = {
 
 export function Header({ user }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const { t, locale } = useLocale();
+  const { toggleMobile } = useNav();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const isDashboard = pathname === "/dashboard";
 
   const today = new Date().toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
     month: "long",
@@ -42,22 +46,34 @@ export function Header({ user }: Props) {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white/95 px-8 py-5 backdrop-blur-md">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-800">
-          {t("header.welcome", { name: user.name.split(" ")[0] })}
-        </h1>
-        <p className="mt-0.5 text-sm text-slate-500">
-          {t("header.overview", { date: today })}
-        </p>
-      </div>
-
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-md sm:px-8 sm:py-5">
+      <div className="flex min-w-0 items-center gap-3">
         <button
           type="button"
-          className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          onClick={toggleMobile}
+          className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50 lg:hidden"
+          aria-label={t("app.menu")}
         >
-          {user.company}
+          <Menu size={18} />
+        </button>
+        {isDashboard && (
+          <div className="min-w-0">
+            <h1 className="truncate text-lg font-semibold text-slate-800 sm:text-xl">
+              {t("header.welcome", { name: user.name.split(" ")[0] })}
+            </h1>
+            <p className="mt-0.5 truncate text-sm text-slate-500">
+              {t("header.overview", { date: today })}
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          className="hidden items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 sm:flex"
+        >
+          <span className="max-w-[140px] truncate">{user.company}</span>
           <ChevronDown size={14} />
         </button>
         <LanguageSwitcher variant="light" />

@@ -8,6 +8,8 @@ const PUBLIC_PATHS = [
   "/",
   "/login",
   "/signup",
+  "/privacy",
+  "/terms",
   "/api/auth/login",
   "/api/auth/signup",
   "/api/auth/logout",
@@ -38,7 +40,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   try {
@@ -48,7 +50,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const res = NextResponse.redirect(new URL("/", request.url));
+    const res = NextResponse.redirect(new URL("/login", request.url));
     res.cookies.delete(COOKIE_NAME);
     return res;
   }
