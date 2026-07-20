@@ -3,6 +3,7 @@
 import { speciesColors } from "@/data/reference-data";
 import { Info } from "lucide-react";
 import type { Species } from "@/types";
+import { useLocale } from "@/i18n/LocaleProvider";
 import {
   LineChart,
   Line,
@@ -19,13 +20,13 @@ type Props = {
 };
 
 export function PriceTrendsChart({ species, lastUpdated }: Props) {
+  const { t, locale } = useLocale();
+
   if (species.length === 0) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-800">
-          Price Trends by Species (EUR/kg)
-        </h2>
-        <p className="mt-4 text-sm text-slate-500">Market data is loading…</p>
+        <h2 className="text-sm font-semibold text-slate-800">{t("dashboard.priceTrends")}</h2>
+        <p className="mt-4 text-sm text-slate-500">{t("dashboard.priceLoading")}</p>
       </div>
     );
   }
@@ -43,7 +44,7 @@ export function PriceTrendsChart({ species, lastUpdated }: Props) {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="text-sm font-semibold text-slate-800">
-            Price Trends by Species (EUR/kg)
+            {t("dashboard.priceTrends")}
           </h2>
           <Info size={14} className="text-slate-400" />
         </div>
@@ -87,10 +88,16 @@ export function PriceTrendsChart({ species, lastUpdated }: Props) {
                 tick={{ fontSize: 11, fill: "#94a3b8" }}
                 tickFormatter={(v) => {
                   const [, month] = String(v).split("-");
-                  const months = [
-                    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-                  ];
+                  const months =
+                    locale === "fr"
+                      ? [
+                          "Jan", "Fév", "Mar", "Avr", "Mai", "Juin",
+                          "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc",
+                        ]
+                      : [
+                          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+                        ];
                   return months[parseInt(month, 10) - 1] ?? v;
                 }}
               />
@@ -124,7 +131,7 @@ export function PriceTrendsChart({ species, lastUpdated }: Props) {
       </div>
 
       <p className="mt-3 text-[10px] text-slate-400">
-        Updated weekly · Last compile: {lastUpdated}
+        {t("dashboard.updatedWeekly", { date: lastUpdated })}
       </p>
     </div>
   );

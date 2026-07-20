@@ -2,6 +2,7 @@
 
 import { TrendingDown, TrendingUp, Fish, Newspaper } from "lucide-react";
 import type { DashboardMetrics } from "@/types";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 function Sparkline({ data, color }: { data: number[]; color: string }) {
   const min = Math.min(...data);
@@ -19,12 +20,7 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
   return (
     <svg width={w} height={h} className="opacity-80">
-      <polyline
-        fill="none"
-        stroke={color}
-        strokeWidth="2"
-        points={points}
-      />
+      <polyline fill="none" stroke={color} strokeWidth="2" points={points} />
     </svg>
   );
 }
@@ -35,18 +31,20 @@ type Props = {
 };
 
 export function MetricCards({ metrics, newsCount }: Props) {
+  const { t } = useLocale();
+
   const cards = [
     {
-      label: "Average Landed Cost",
+      label: t("metrics.avgLandedCost"),
       value: `€${metrics.avgLandedCost.value.toFixed(2)}`,
-      unit: "/ kg",
+      unit: t("common.perKg"),
       change: metrics.avgLandedCost.change7d,
       sparkline: metrics.avgLandedCost.sparkline,
       sparkColor: "#2563eb",
       icon: null,
     },
     {
-      label: "Freight Rate Index",
+      label: t("metrics.freightIndex"),
       value: metrics.freightIndex.value.toLocaleString(),
       unit: "",
       change: metrics.freightIndex.change7d,
@@ -55,18 +53,18 @@ export function MetricCards({ metrics, newsCount }: Props) {
       icon: null,
     },
     {
-      label: "Top Traded Species",
+      label: t("metrics.topSpecies"),
       value: String(metrics.watchlistCount),
-      unit: " in your watchlist",
+      unit: ` ${t("common.inWatchlist")}`,
       change: null,
       sparkline: null,
       sparkColor: "",
       icon: <Fish size={20} className="text-emerald-500" />,
     },
     {
-      label: "AI News Updates",
+      label: t("metrics.aiNews"),
       value: String(newsCount ?? metrics.newsToday),
-      unit: " new today",
+      unit: ` ${t("common.newToday")}`,
       change: null,
       sparkline: null,
       sparkColor: "",
@@ -79,27 +77,21 @@ export function MetricCards({ metrics, newsCount }: Props) {
       {cards.map((card) => (
         <div
           key={card.label}
-          className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+          className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
         >
           <p className="text-xs text-slate-500">{card.label}</p>
           <div className="mt-2 flex items-end justify-between">
             <div>
               <span className="text-2xl font-bold text-slate-800">{card.value}</span>
-              {card.unit && (
-                <span className="text-sm text-slate-500">{card.unit}</span>
-              )}
+              {card.unit && <span className="text-sm text-slate-500">{card.unit}</span>}
               {card.change !== null && (
                 <div
                   className={`mt-1 flex items-center gap-1 text-xs font-medium ${
                     card.change < 0 ? "text-emerald-600" : "text-red-500"
                   }`}
                 >
-                  {card.change < 0 ? (
-                    <TrendingDown size={12} />
-                  ) : (
-                    <TrendingUp size={12} />
-                  )}
-                  {Math.abs(card.change)}% vs last 7 days
+                  {card.change < 0 ? <TrendingDown size={12} /> : <TrendingUp size={12} />}
+                  {Math.abs(card.change)}% {t("common.vsLast7Days")}
                 </div>
               )}
             </div>

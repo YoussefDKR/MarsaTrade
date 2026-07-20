@@ -4,9 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { MarsaTradeLogo } from "@/components/MarsaTradeLogo";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +27,7 @@ export default function LoginPage() {
     const data = await res.json();
     setLoading(false);
     if (!res.ok) {
-      setError(data.error ?? "Login failed");
+      setError(data.error ?? t("auth.loginFailed"));
       return;
     }
     router.push("/dashboard");
@@ -32,7 +35,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-navy-950 px-4">
+    <div className="relative flex min-h-screen items-center justify-center bg-navy-950 px-4">
+      <div className="absolute right-4 top-4">
+        <LanguageSwitcher variant="dark" />
+      </div>
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
           <Link href="/" className="inline-block">
@@ -42,7 +48,9 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-slate-600">Email</label>
+            <label className="mb-1 block text-xs font-medium text-slate-600">
+              {t("auth.email")}
+            </label>
             <input
               type="email"
               value={email}
@@ -53,7 +61,9 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-slate-600">Password</label>
+            <label className="mb-1 block text-xs font-medium text-slate-600">
+              {t("auth.password")}
+            </label>
             <input
               type="password"
               value={password}
@@ -69,14 +79,14 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full rounded-lg bg-navy-600 py-2.5 text-sm font-semibold text-white hover:bg-navy-700 disabled:opacity-50"
           >
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? t("auth.signingIn") : t("auth.signIn")}
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-slate-600">
-          No account?{" "}
+          {t("auth.noAccount")}{" "}
           <Link href="/signup" className="font-medium text-navy-600 hover:underline">
-            Start free trial
+            {t("auth.startTrial")}
           </Link>
         </p>
       </div>

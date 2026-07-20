@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { LocaleProvider } from "@/i18n/LocaleProvider";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
 
 export const metadata: Metadata = {
   title: "MarsaTrade — Global Seafood Intelligence",
@@ -14,16 +19,16 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <LocaleProvider>{children}</LocaleProvider>
+      </body>
     </html>
   );
 }

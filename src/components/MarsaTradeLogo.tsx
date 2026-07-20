@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 type Props = {
   href?: string | null;
@@ -8,6 +11,7 @@ type Props = {
 };
 
 function BrandText({ light = true }: { light?: boolean }) {
+  const { t } = useLocale();
   return (
     <div className="leading-tight">
       <div
@@ -22,7 +26,7 @@ function BrandText({ light = true }: { light?: boolean }) {
           light ? "text-slate-400" : "text-slate-500"
         }`}
       >
-        Global Seafood Intelligence
+        {t("brand.tagline")}
       </div>
     </div>
   );
@@ -68,7 +72,7 @@ export function MarsaTradeLogo({
     variant === "full" ? (
       <Image
         src="/logo.png"
-        alt="MarsaTrade — Global Seafood Intelligence"
+        alt="MarsaTrade"
         width={160}
         height={56}
         className={`h-14 w-auto object-contain ${className}`}
@@ -114,9 +118,10 @@ export function DashboardMockupImage({ className = "" }: { className?: string })
       />
       <Image
         src="/dashboard-mockup.png"
-        alt="MarsaTrade dashboard — price trends, freight rates, landed cost calculator, and AI news feed"
+        alt="MarsaTrade dashboard preview"
         width={1400}
         height={980}
+        sizes="(max-width: 1024px) 100vw, 50vw"
         className="relative w-full rounded-xl border border-white/10 shadow-2xl shadow-black/50"
         priority
       />

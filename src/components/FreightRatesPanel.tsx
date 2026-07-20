@@ -3,6 +3,7 @@
 import { TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import type { FreightRoute } from "@/types";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 function MiniSparkline({ data, positive }: { data: number[]; positive: boolean }) {
   const min = Math.min(...data);
@@ -33,15 +34,14 @@ type Props = {
 };
 
 export function FreightRatesPanel({ routes }: Props) {
+  const { t } = useLocale();
   const displayed = routes.slice(0, 4);
 
   if (displayed.length === 0) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-800">
-          Freight Rates by Route (USD / 40ft)
-        </h2>
-        <p className="mt-4 text-sm text-slate-500">Freight data is loading…</p>
+        <h2 className="text-sm font-semibold text-slate-800">{t("dashboard.freightTitle")}</h2>
+        <p className="mt-4 text-sm text-slate-500">{t("dashboard.freightLoading")}</p>
       </div>
     );
   }
@@ -50,7 +50,7 @@ export function FreightRatesPanel({ routes }: Props) {
     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-slate-800">
-          Freight Rates by Route (USD / 40ft)
+          {t("dashboard.freightTitle")}
         </h2>
         <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
           USD
@@ -90,11 +90,11 @@ export function FreightRatesPanel({ routes }: Props) {
         href="/freight"
         className="mt-4 block text-xs font-medium text-navy-600 hover:underline"
       >
-        View all routes →
+        {t("dashboard.viewRoutes")}
       </Link>
 
       <p className="mt-2 text-[10px] text-slate-400">
-        Compiled weekly · Not real-time spot rates
+        {t("dashboard.freightNote")}
       </p>
     </div>
   );

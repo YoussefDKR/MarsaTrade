@@ -12,6 +12,7 @@ import type {
   SpeciesId,
 } from "@/types";
 import { Info, Loader2 } from "lucide-react";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 const CURRENCY_LABELS: Record<(typeof CALCULATOR_CURRENCIES)[number], string> = {
   EUR: "EUR",
@@ -50,6 +51,7 @@ type Props = {
 };
 
 export function LandedCostCalculator({ species }: Props) {
+  const { t } = useLocale();
   const [speciesId, setSpeciesId] = useState<SpeciesId>("tuna-yellowfin");
   const [originId, setOriginId] = useState("agadir");
   const [destinationId, setDestinationId] = useState("rotterdam");
@@ -89,36 +91,36 @@ export function LandedCostCalculator({ species }: Props) {
 
   const rows = breakdown
     ? [
-        { label: "FOB Price", value: breakdown.fob, detail: breakdown.details.fob },
+        { label: t("dashboard.fobPrice"), value: breakdown.fob, detail: breakdown.details.fob },
         {
-          label: "Freight (40ft Reefer)",
+          label: t("dashboard.freightReefer"),
           value: breakdown.freight,
           detail: breakdown.details.freight,
         },
         {
-          label: "Insurance (1.2%)",
+          label: t("dashboard.insurance"),
           value: breakdown.insurance,
           detail: breakdown.details.insurance,
         },
         {
-          label: "Customs Duties",
+          label: t("dashboard.customsDuties"),
           value: breakdown.duties,
           detail: breakdown.details.duties,
         },
-        { label: "VAT", value: breakdown.vat, detail: breakdown.details.vat },
+        { label: t("dashboard.vat"), value: breakdown.vat, detail: breakdown.details.vat },
       ]
     : [];
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
-        <h2 className="text-sm font-semibold text-slate-800">Landed Cost Calculator</h2>
+        <h2 className="text-sm font-semibold text-slate-800">{t("dashboard.calculator")}</h2>
         <Info size={15} className="text-slate-400" aria-label="Cost breakdown info" />
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <SelectField
-          label="Species"
+          label={t("dashboard.species")}
           value={speciesId}
           onChange={(v) => setSpeciesId(v as SpeciesId)}
           options={species.map((s) => ({
@@ -127,7 +129,7 @@ export function LandedCostCalculator({ species }: Props) {
           }))}
         />
         <SelectField
-          label="Origin"
+          label={t("dashboard.origin")}
           value={originId}
           onChange={setOriginId}
           options={origins.map((o) => ({
@@ -136,7 +138,7 @@ export function LandedCostCalculator({ species }: Props) {
           }))}
         />
         <SelectField
-          label="Destination"
+          label={t("dashboard.destination")}
           value={destinationId}
           onChange={setDestinationId}
           options={destinations.map((d) => ({
@@ -145,13 +147,13 @@ export function LandedCostCalculator({ species }: Props) {
           }))}
         />
         <SelectField
-          label="Incoterm"
+          label={t("dashboard.incoterm")}
           value={incoterm}
           onChange={(v) => setIncoterm(v as Incoterm)}
           options={INCOTERMS.map((i) => ({ value: i, label: i }))}
         />
         <SelectField
-          label="Currency"
+          label={t("dashboard.currency")}
           value={currency}
           onChange={(v) => setCurrency(v as Currency)}
           options={CALCULATOR_CURRENCIES.map((c) => ({
@@ -166,9 +168,9 @@ export function LandedCostCalculator({ species }: Props) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 text-left text-xs text-slate-500">
-                <th className="pb-2.5 font-medium">Cost Component</th>
-                <th className="pb-2.5 font-medium">Amount ({currency}/kg)</th>
-                <th className="pb-2.5 font-medium">Details</th>
+                <th className="pb-2.5 font-medium">{t("dashboard.costComponent")}</th>
+                <th className="pb-2.5 font-medium">{t("dashboard.amount", { currency })}</th>
+                <th className="pb-2.5 font-medium">{t("dashboard.details")}</th>
               </tr>
             </thead>
             <tbody>
@@ -195,13 +197,13 @@ export function LandedCostCalculator({ species }: Props) {
 
         {breakdown && !loading && (
           <div className="w-56 shrink-0 self-start rounded-xl bg-blue-50 p-5">
-            <p className="text-xs font-medium text-slate-500">Final Landed Cost</p>
+            <p className="text-xs font-medium text-slate-500">{t("dashboard.finalCost")}</p>
             <p className="mt-1 text-3xl font-bold text-blue-600">
               {formatCurrency(breakdown.total, currency)}
               <span className="text-base font-normal text-slate-500"> /kg</span>
             </p>
             <div className="mt-4 border-t border-blue-100 pt-4">
-              <p className="text-xs font-medium text-slate-500">Estimated Margin</p>
+              <p className="text-xs font-medium text-slate-500">{t("dashboard.estimatedMargin")}</p>
               <p
                 className={`mt-1 text-xl font-bold ${
                   breakdown.margin >= 0 ? "text-emerald-600" : "text-red-500"
@@ -219,8 +221,8 @@ export function LandedCostCalculator({ species }: Props) {
       </div>
 
       <p className="mt-4 text-[11px] italic text-slate-400">
-        * Calculations are estimates based on the latest available data and may vary.
-        {ratesDate ? ` FX rates: ${ratesDate} (ECB via Frankfurter).` : ""}
+        {t("dashboard.calcDisclaimer")}
+        {ratesDate ? ` ${t("dashboard.fxRates", { date: ratesDate })}` : ""}
       </p>
     </div>
   );

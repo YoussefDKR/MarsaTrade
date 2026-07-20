@@ -2,6 +2,7 @@
 
 import type { NewsItem } from "@/types";
 import Link from "next/link";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 const categoryColors: Record<string, string> = {
   Regulation: "bg-blue-100 text-blue-700",
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function NewsFeed({ items, variant = "default", className = "" }: Props) {
+  const { t } = useLocale();
   const limit = variant === "sidebar" ? 8 : 4;
   const displayed = items.slice(0, limit);
 
@@ -27,18 +29,18 @@ export function NewsFeed({ items, variant = "default", className = "" }: Props) 
       } ${className}`}
     >
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-800">AI News Feed</h2>
+        <h2 className="text-sm font-semibold text-slate-800">{t("dashboard.newsFeed")}</h2>
         <Link
           href="/news"
           className="text-xs font-medium text-navy-600 hover:underline"
         >
-          View all
+          {t("common.viewAll")}
         </Link>
       </div>
 
       {displayed.length === 0 ? (
         <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
-          Loading seafood trade news from RSS feeds…
+          {t("dashboard.newsLoading")}
         </div>
       ) : (
         <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
@@ -65,7 +67,7 @@ export function NewsFeed({ items, variant = "default", className = "" }: Props) 
                 ))}
                 {item.aiSummarized && (
                   <span className="rounded bg-violet-100 px-1.5 py-0.5 text-[10px] font-medium text-violet-700">
-                    AI Summary
+                    {t("dashboard.aiSummary")}
                   </span>
                 )}
               </div>
@@ -81,7 +83,7 @@ export function NewsFeed({ items, variant = "default", className = "" }: Props) 
                 rel="noopener noreferrer"
                 className="mt-1.5 inline-block text-xs font-medium text-navy-600 hover:underline"
               >
-                Read full article →
+                {t("dashboard.readArticle")}
               </a>
             </article>
           ))}

@@ -10,9 +10,11 @@ export const PRO_FEATURES = [
   "Priority email support",
 ];
 
-export function formatBillingDate(iso?: string): string {
+import type { Locale } from "@/i18n/messages";
+
+export function formatBillingDate(iso?: string, locale: Locale = "en"): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-GB", {
+  return new Date(iso).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",
