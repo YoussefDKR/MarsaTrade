@@ -10,12 +10,14 @@ import {
   Play,
   Check,
   BarChart3,
-  Zap,
-  Languages,
+  Calculator,
+  FileDown,
+  HelpCircle,
+  Quote,
   Menu,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MarsaTradeLogo, DashboardMockupImage } from "@/components/MarsaTradeLogo";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -35,9 +37,39 @@ const TRUSTED_BY = [
   "Sahara Fisheries",
 ];
 
+const GUIDE_KEYS = [
+  { icon: Calculator, title: "guide1Title", desc: "guide1Desc" },
+  { icon: Ship, title: "guide2Title", desc: "guide2Desc" },
+  { icon: TrendingUp, title: "guide3Title", desc: "guide3Desc" },
+  { icon: Newspaper, title: "guide4Title", desc: "guide4Desc" },
+  { icon: FileDown, title: "guide5Title", desc: "guide5Desc" },
+] as const;
+
+const FAQ_KEYS = [
+  { q: "faq1Q", a: "faq1A" },
+  { q: "faq2Q", a: "faq2A" },
+  { q: "faq3Q", a: "faq3A" },
+  { q: "faq4Q", a: "faq4A" },
+] as const;
+
+const VALUE_KEYS = ["value1", "value2", "value3"] as const;
+
 export function LandingPageClient({ rates }: Props) {
   const { t, m } = useLocale();
   const [mobileNav, setMobileNav] = useState(false);
+  const presidentParagraphs = t("aboutPage.presidentMessage").split("\n\n");
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const el = document.querySelector(hash);
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
+  function closeMobileNav() {
+    setMobileNav(false);
+  }
 
   return (
     <div className="min-h-screen bg-navy-950 text-white">
@@ -52,12 +84,12 @@ export function LandingPageClient({ rates }: Props) {
             <a href="#pricing" className="transition hover:text-white">
               {t("nav.pricing")}
             </a>
-            <Link href="/resources" className="transition hover:text-white">
+            <a href="#resources" className="transition hover:text-white">
               {t("nav.resources")}
-            </Link>
-            <Link href="/about" className="transition hover:text-white">
+            </a>
+            <a href="#about" className="transition hover:text-white">
               {t("nav.about")}
-            </Link>
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -89,10 +121,10 @@ export function LandingPageClient({ rates }: Props) {
         {mobileNav && (
           <nav className="border-t border-white/10 px-6 py-4 md:hidden">
             <div className="flex flex-col gap-3 text-sm text-slate-300">
-              <a href="#product" onClick={() => setMobileNav(false)}>{t("nav.product")}</a>
-              <a href="#pricing" onClick={() => setMobileNav(false)}>{t("nav.pricing")}</a>
-              <Link href="/resources" onClick={() => setMobileNav(false)}>{t("nav.resources")}</Link>
-              <Link href="/about" onClick={() => setMobileNav(false)}>{t("nav.about")}</Link>
+              <a href="#product" onClick={closeMobileNav}>{t("nav.product")}</a>
+              <a href="#pricing" onClick={closeMobileNav}>{t("nav.pricing")}</a>
+              <a href="#resources" onClick={closeMobileNav}>{t("nav.resources")}</a>
+              <a href="#about" onClick={closeMobileNav}>{t("nav.about")}</a>
               <div className="pt-2 sm:hidden">
                 <LanguageSwitcher variant="dark" />
               </div>
@@ -101,7 +133,8 @@ export function LandingPageClient({ rates }: Props) {
         )}
       </header>
 
-      <section id="product" className="relative overflow-hidden">
+      {/* Hero */}
+      <section id="product" className="relative overflow-hidden scroll-mt-20">
         <div
           className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950"
           aria-hidden
@@ -156,13 +189,13 @@ export function LandingPageClient({ rates }: Props) {
                 {t("landing.startTrial")}
                 <ArrowRight size={16} />
               </Link>
-              <Link
-                href="/resources"
+              <a
+                href="#resources"
                 className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
               >
                 <Play size={14} className="fill-white" />
                 {t("landing.seeHow")}
-              </Link>
+              </a>
             </div>
 
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
@@ -193,6 +226,7 @@ export function LandingPageClient({ rates }: Props) {
         </div>
       </section>
 
+      {/* Trusted by */}
       <section className="border-y border-white/5 bg-navy-900/50 py-12">
         <RevealOnScroll className="mx-auto max-w-7xl px-6 text-center">
           <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
@@ -212,28 +246,59 @@ export function LandingPageClient({ rates }: Props) {
         </RevealOnScroll>
       </section>
 
-      <section id="features" className="bg-white py-20 text-slate-800">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { icon: TrendingUp, title: m.landing.feat1Title, desc: m.landing.feat1Desc },
-            { icon: Ship, title: m.landing.feat2Title, desc: m.landing.feat2Desc },
-            { icon: Languages, title: m.landing.feat3Title, desc: m.landing.feat3Desc },
-            { icon: Zap, title: m.landing.feat4Title, desc: m.landing.feat4Desc },
-          ].map(({ icon: Icon, title, desc }, i) => (
-            <RevealOnScroll key={title} delay={i * 80}>
-              <div className="rounded-xl border border-slate-100 p-5 transition hover:-translate-y-1 hover:shadow-lg">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
-                  <Icon size={20} className="text-navy-600" />
+      {/* Resources — on homepage */}
+      <section id="resources" className="scroll-mt-20 bg-white py-20 text-slate-800">
+        <div className="mx-auto max-w-7xl px-6">
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold text-slate-900">{t("resourcesPage.title")}</h2>
+            <p className="mt-3 max-w-2xl text-lg text-slate-600">{t("resourcesPage.subtitle")}</p>
+          </RevealOnScroll>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {GUIDE_KEYS.map(({ icon: Icon, title, desc }, i) => (
+              <RevealOnScroll key={title} delay={i * 60}>
+                <div className="h-full rounded-xl border border-slate-100 p-6 transition hover:-translate-y-1 hover:shadow-lg">
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
+                    <Icon size={20} className="text-navy-600" />
+                  </div>
+                  <h3 className="text-sm font-bold">{t(`resourcesPage.${title}`)}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                    {t(`resourcesPage.${desc}`)}
+                  </p>
                 </div>
-                <h3 className="text-sm font-bold">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500">{desc}</p>
-              </div>
-            </RevealOnScroll>
-          ))}
+              </RevealOnScroll>
+            ))}
+          </div>
+
+          <RevealOnScroll className="mt-12 rounded-xl border border-navy-100 bg-navy-50 p-8">
+            <h3 className="text-lg font-semibold text-navy-900">{t("resourcesPage.dataTitle")}</h3>
+            <p className="mt-3 leading-relaxed text-slate-600">{t("resourcesPage.dataBody")}</p>
+          </RevealOnScroll>
+
+          <RevealOnScroll className="mt-12">
+            <div className="mb-6 flex items-center gap-2">
+              <HelpCircle size={20} className="text-navy-600" />
+              <h3 className="text-lg font-semibold text-slate-900">{t("resourcesPage.faqTitle")}</h3>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {FAQ_KEYS.map(({ q, a }) => (
+                <details
+                  key={q}
+                  className="group rounded-xl border border-slate-100 bg-slate-50 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-800 marker:content-none group-open:mb-2">
+                    {t(`resourcesPage.${q}`)}
+                  </summary>
+                  <p className="text-sm leading-relaxed text-slate-500">{t(`resourcesPage.${a}`)}</p>
+                </details>
+              ))}
+            </div>
+          </RevealOnScroll>
         </div>
       </section>
 
-      <section id="pricing" className="border-t border-slate-200 bg-slate-50 py-20">
+      {/* Pricing */}
+      <section id="pricing" className="scroll-mt-20 border-t border-slate-200 bg-slate-50 py-20">
         <RevealOnScroll className="mx-auto max-w-lg px-6 text-center">
           <div className="pricing-card rounded-2xl border border-slate-200 bg-white p-10 shadow-xl">
             <p className="text-xs font-semibold uppercase tracking-wider text-navy-600">
@@ -255,25 +320,86 @@ export function LandingPageClient({ rates }: Props) {
         </RevealOnScroll>
       </section>
 
-      <section className="border-t border-white/10 bg-navy-950 py-16">
-        <RevealOnScroll className="mx-auto max-w-3xl px-6 text-center">
-          <MarsaTradeLogo variant="auth" href={null} className="mx-auto" />
-          <p className="mt-6 text-sm leading-relaxed text-slate-400">{t("landing.aboutDesc")}</p>
-          <Link
-            href="/about"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300"
-          >
-            {t("nav.about")}
-            <ArrowRight size={14} />
-          </Link>
-        </RevealOnScroll>
+      {/* About Us — on homepage */}
+      <section id="about" className="scroll-mt-20 bg-navy-950 py-20">
+        <div className="mx-auto max-w-5xl px-6">
+          <RevealOnScroll className="text-center">
+            <MarsaTradeLogo variant="auth" href={null} className="mx-auto" />
+            <h2 className="mt-6 text-3xl font-bold text-white">{t("aboutPage.title")}</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-lg text-slate-400">{t("aboutPage.subtitle")}</p>
+          </RevealOnScroll>
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-2">
+            <RevealOnScroll>
+              <div className="rounded-xl border border-white/10 bg-navy-900 p-8">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-400">
+                  {t("aboutPage.missionTitle")}
+                </h3>
+                <p className="mt-4 leading-relaxed text-slate-300">{t("aboutPage.missionBody")}</p>
+              </div>
+            </RevealOnScroll>
+            <RevealOnScroll delay={80}>
+              <div className="rounded-xl border border-white/10 bg-navy-900 p-8">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-400">
+                  {t("aboutPage.visionTitle")}
+                </h3>
+                <p className="mt-4 leading-relaxed text-slate-300">{t("aboutPage.visionBody")}</p>
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          <RevealOnScroll className="mt-10">
+            <div className="relative overflow-hidden rounded-2xl border border-navy-700 bg-gradient-to-br from-navy-900 to-navy-950 p-8 sm:p-10">
+              <Quote size={48} className="absolute right-6 top-6 text-white/10" aria-hidden />
+              <h3 className="text-xl font-semibold text-blue-300">{t("aboutPage.presidentTitle")}</h3>
+              <div className="mt-6 space-y-4">
+                {presidentParagraphs.map((para) => (
+                  <p key={para.slice(0, 40)} className="leading-relaxed text-slate-300">
+                    {para}
+                  </p>
+                ))}
+              </div>
+              <div className="mt-8 border-t border-white/10 pt-6">
+                <p
+                  className="text-2xl tracking-wide text-white"
+                  style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                >
+                  {t("aboutPage.presidentName")}
+                </p>
+                <p className="mt-1 text-sm text-slate-400">{t("aboutPage.presidentRole")}</p>
+              </div>
+            </div>
+          </RevealOnScroll>
+
+          <RevealOnScroll className="mt-10">
+            <h3 className="text-lg font-semibold text-white">{t("aboutPage.valuesTitle")}</h3>
+            <ul className="mt-4 space-y-3">
+              {VALUE_KEYS.map((key) => (
+                <li key={key} className="flex items-start gap-3 text-sm text-slate-300">
+                  <Check size={18} className="mt-0.5 shrink-0 text-emerald-500" />
+                  {t(`aboutPage.${key}`)}
+                </li>
+              ))}
+            </ul>
+          </RevealOnScroll>
+
+          <RevealOnScroll className="mt-10 text-center">
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 rounded-lg bg-navy-600 px-8 py-3.5 text-sm font-semibold text-white hover:bg-blue-600"
+            >
+              {t("aboutPage.cta")}
+              <ArrowRight size={16} />
+            </Link>
+          </RevealOnScroll>
+        </div>
       </section>
 
       <footer className="border-t border-white/10 py-8 text-center text-xs text-slate-500">
         <p>© {new Date().getFullYear()} MarsaTrade · {t("landing.footer")}</p>
-        <div className="mt-3 flex justify-center gap-4">
-          <Link href="/resources" className="hover:text-slate-300">{t("nav.resources")}</Link>
-          <Link href="/about" className="hover:text-slate-300">{t("nav.about")}</Link>
+        <div className="mt-3 flex flex-wrap justify-center gap-4">
+          <a href="#resources" className="hover:text-slate-300">{t("nav.resources")}</a>
+          <a href="#about" className="hover:text-slate-300">{t("nav.about")}</a>
           <Link href="/privacy" className="hover:text-slate-300">{t("app.privacy")}</Link>
           <Link href="/terms" className="hover:text-slate-300">{t("app.terms")}</Link>
         </div>
