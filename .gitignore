@@ -32,9 +32,8 @@ yarn-error.log*
 .env*.local
 .env
 
-# runtime data store (legacy — now using Postgres)
-/data/store.json
+# supabase local temp
+supabase/.temp/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# vercel
+.vercel
